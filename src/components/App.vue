@@ -1,15 +1,14 @@
 <template>
 	<div>	
-
 		<nav id="js-menu" class='menu-left'>
 			<div class="menu-title">
-				<a v-link="'/home'" v-on:click="changeTitle('Komica')">
+				<a v-link="'/home'">
 					<img :src="logo">
 				</a>
 			</div>
 			<ul class="nav" v-on:click="menuToggle()">
-				<li><a v-link="'/board/news'" v-on:click="changeTitle('新番捏他')">新番捏他</a></li>
-				<li><a v-link="'/board/live'" v-on:click="changeTitle('新番實況')">新番實況</a></li>
+				<li><a v-link="'/board/news'">新番捏他</a></li>
+				<li><a v-link="'/board/live'">新番實況</a></li>
 			</ul>
 		</nav>
 
@@ -25,7 +24,7 @@
 
 		<div id="js-overlay" class="overlay" v-on:click="menuToggle()"></div>
 
-		<div class='container-fluid'>
+		<div class='container-fluid' v-infinite-scroll="loadMore()" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
 			<div class="row">
 				<router-view></router-view>
 			</div>
@@ -37,12 +36,23 @@
 <script>
 	import $ from "jquery";
 	import Logo from "../images/komicaLogo.jpg";
+	import infiniteScroll  from 'vue-infinite-scroll';
+	import {router} from '../main.js';
 
+	const titleText = {
+		home: "Komica",
+		news: "新番捏他",
+		live: "新番實況"
+	};
+
+	
 	export default{
 		data(){
 			return {
 				title: "Komica",
-				logo: "dist/" + Logo
+				logo: Logo,
+				data: [],
+				busy: false
 			}
 		},
 		methods: {
@@ -52,8 +62,23 @@
 			},
 			changeTitle(text){
 				this.title = text;
+			},
+			loadMore(){
+				this.busy = true;
+				setTimeout(() => {
+		        for (var i = 0, j = 10; i < j; i++) {
+		          this.data.push({ name: count++ });
+		        }
+		        this.busy = false;
+		      }, 1000);
 			}
-		}
+		},
+		computed:{
+			title: function(){
+				return this.$route.params.where ? titleText[this.$route.params.where] : titleText["home"]
+			}
+		},
+		directives: {infiniteScroll}
 	}
 
 </script>
