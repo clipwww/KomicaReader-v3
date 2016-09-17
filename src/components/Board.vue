@@ -1,8 +1,9 @@
 <template>
+	<div class="btn btn-default" v-on:click="updatePost()">TEST</div>
 	<div class="col-lg-offset-1 col-lg-10">
-		<div class="row grid">
+		<div class="row grid" >
 			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 grid-item" v-for="post in komicaPosts">
-				<a v-link="'detail/' + post.no">
+				<a v-link="'/detail/' + where + '/' + post.no">
 					<div class="item-warp">
 						<div class="item-header">
 							<img v-bind:src="post.imgSmall" class="img-responsive"/>
@@ -17,7 +18,7 @@
 								{{{ post.title }}}
 							</div>
 							<div class="item-content">
-								{{{ post.text }}}
+								{{{ post.text.substring(0, 200) }}}{{ post.text.length > 200 ? "......" : nul }}
 							</div>
 						</div>
 						<div class="item-footer">
@@ -51,29 +52,55 @@
 		data(){
 			return{
 				komicaPosts: [],
-				where: router._currentRoute.params.where
+				where: this.$route.params.where,
+				$grid: "",
+				page: 0
+
 			}
 		},
 		methods:{
 			updatePost(){
-				this.$http.get('https://komicaapi.apphb.com/api/' + this.where ).then((res) => {
-					this.komicaPosts = res.data;
-					console.log(this.komicaPosts);
+				this.$http.get('https://komicaapi.apphb.com/api/' + this.where + "?page=" + this.page).then((res) => {
 
-					$('.grid').imagesLoaded(function () {
-				        new Masonry( '.grid', {
-							itemSelector: '.grid-item',
-				            percentPosition: true
-						});
-				    });
+					var self = this;
+
+					$.each(res.data, function(i, data){
+						self.komicaPosts.push(data);
+					});
+
+					console.log(this.komicaPosts);
 					
+					setTimeout(function () {
+                   		self.masonryInit();
+	                }, 200);
+
+					this.page += 1;
 
 				}).catch((err) => { console.log(err) })
+			},
+			masonryInit(){
+				$('.grid').imagesLoaded(function (self) {
+			        new Masonry('.grid', {
+						itemSelector: '.grid-item',
+			            percentPosition: true
+					});
+			    });			    
+			}
+		},
+		computed:{
+			where: function(){
+				return this.$route.params.where;
+			}
+		},
+		watch:{
+			where : function(val, oldVal){
+				this.komicaPosts = [];
+				this.page = 0;
+				this.updatePost();
 			}
 		},
 		ready: function(){
 			this.updatePost();
-			
 		}
 	}
 </script>

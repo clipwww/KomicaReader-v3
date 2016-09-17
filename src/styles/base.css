@@ -90,7 +90,7 @@ header h2{
 	width: 270px;
 	background-color: white;
 	transition: all .3s ease-in-out;
-	box-shadow: 0 0 10px rgba(0,0,0, .4);
+	box-shadow: 0 0 5px rgba(0,0,0, .4);
 	z-index: 4;
 }
 
