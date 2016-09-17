@@ -56,7 +56,7 @@
 		},
 		methods:{
 			updatePost(){
-				this.$http.get('http://komicaapi.apphb.com/api/' + this.where ).then((res) => {
+				this.$http.get('https://komicaapi.apphb.com/api/' + this.where ).then((res) => {
 					this.komicaPosts = res.data;
 					console.log(this.komicaPosts);
 
