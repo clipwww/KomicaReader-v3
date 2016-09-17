@@ -31,6 +31,7 @@
     "style-loader": "^0.13.1",
     "vue-hot-reload-api": "^2.0.6",
     "vue-html-loader": "^1.2.3",
+    "vue-infinite-loading": "^1.1.0",
     "vue-infinite-scroll": "^0.2.3",
     "vue-loader": "^8.5.2",
     "vue-style-loader": "^1.0.0",

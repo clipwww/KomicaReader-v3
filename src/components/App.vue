@@ -9,6 +9,8 @@
 			<ul class="nav" v-on:click="menuToggle()">
 				<li><a v-link="'/board/news'">新番捏他</a></li>
 				<li><a v-link="'/board/live'">新番實況</a></li>
+				<li><a v-link="'/board/anime'">動畫</a></li>
+				<li><a v-link="'/board/gup'">少女與戰車</a></li>
 			</ul>
 		</nav>
 
@@ -24,7 +26,7 @@
 
 		<div id="js-overlay" class="overlay" v-on:click="menuToggle()"></div>
 
-		<div class='container-fluid' v-infinite-scroll="loadMore()" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+		<div class='container-fluid'>
 			<div class="row">
 				<router-view></router-view>
 			</div>
@@ -36,13 +38,14 @@
 <script>
 	import $ from "jquery";
 	import Logo from "../images/komicaLogo.jpg";
-	import infiniteScroll  from 'vue-infinite-scroll';
 	import {router} from '../main.js';
 
 	const titleText = {
 		home: "Komica",
 		news: "新番捏他",
-		live: "新番實況"
+		live: "新番實況",
+		gup: "少女與戰車",
+		anime: "動畫"
 	};
 
 	
@@ -51,7 +54,7 @@
 			return {
 				title: "Komica",
 				logo: Logo,
-				data: [],
+				list: [],
 				busy: false
 			}
 		},
@@ -62,23 +65,13 @@
 			},
 			changeTitle(text){
 				this.title = text;
-			},
-			loadMore(){
-				this.busy = true;
-				setTimeout(() => {
-		        for (var i = 0, j = 10; i < j; i++) {
-		          this.data.push({ name: count++ });
-		        }
-		        this.busy = false;
-		      }, 1000);
 			}
 		},
 		computed:{
 			title: function(){
 				return this.$route.params.where ? titleText[this.$route.params.where] : titleText["home"]
 			}
-		},
-		directives: {infiniteScroll}
+		}
 	}
 
 </script>

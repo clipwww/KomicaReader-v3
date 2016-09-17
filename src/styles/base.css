@@ -7,6 +7,7 @@ body{
 	padding-top: 100px;
 	padding-left: 270px;
 	background-color: #FFE;
+	height: 100vh;
 }
 
 a {
@@ -133,6 +134,7 @@ header h2{
 	margin-bottom: 30px;
 	box-shadow: 0 1px 3px rgba(0,0,0,.4);
 	background-color: #F0E0D6;
+	overflow: hidden;
 }
 
 .item-warp .item-header{

@@ -1,5 +1,4 @@
 <template>
-	<div class="btn btn-default" v-on:click="updatePost()">TEST</div>
 	<div class="col-lg-offset-1 col-lg-10">
 		<div class="row grid" >
 			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 grid-item" v-for="post in komicaPosts">
@@ -35,14 +34,27 @@
 				</a>
 			</div>
 		</div>
+		<div class="loading-icon">
+			<infinite-loading :on-infinite="onInfinite"></infinite-loading>
+		</div>
 	</div>
-	
 </template>
+
+<style>
+	.loading-icon{
+		position: fixed;
+		left: 270px;
+		right: 0;
+		top: 80px;
+		background-color: rgba(0,0,0, .8);
+	}
+</style>
 
 <script>
 	import $ from "jquery";
 	import Masonry from 'masonry-layout';
 	import imagesLoaded from "imagesloaded";
+	import InfiniteLoading   from 'vue-infinite-loading';
 	import {router} from '../main.js';
 
 	// provide jQuery argument
@@ -54,8 +66,8 @@
 				komicaPosts: [],
 				where: this.$route.params.where,
 				$grid: "",
-				page: 0
-
+				page: 0,
+				show: false,
 			}
 		},
 		methods:{
@@ -68,24 +80,32 @@
 						self.komicaPosts.push(data);
 					});
 
-					console.log(this.komicaPosts);
+					self.masonryInit();
+					this.show = true;
 					
 					setTimeout(function () {
                    		self.masonryInit();
-	                }, 200);
+	                }, 500);
 
 					this.page += 1;
 
 				}).catch((err) => { console.log(err) })
 			},
 			masonryInit(){
-				$('.grid').imagesLoaded(function (self) {
+				this.$grid = $('.grid').imagesLoaded(function (self) {
 			        new Masonry('.grid', {
 						itemSelector: '.grid-item',
 			            percentPosition: true
 					});
 			    });			    
-			}
+			},
+			onInfinite() {
+				setTimeout(() => {
+					this.updatePost();
+					this.$broadcast('$InfiniteLoading:loaded');
+				}, 1000);
+
+			},
 		},
 		computed:{
 			where: function(){
@@ -96,11 +116,16 @@
 			where : function(val, oldVal){
 				this.komicaPosts = [];
 				this.page = 0;
+				this.show = false;
+				$("body, html").animate({ "scrollTop": 0 }, 600);
 				this.updatePost();
 			}
 		},
 		ready: function(){
-			this.updatePost();
-		}
+
+		},
+		components: {
+			InfiniteLoading,
+		},
 	}
 </script>
