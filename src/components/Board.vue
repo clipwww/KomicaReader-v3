@@ -1,6 +1,6 @@
 <template>
 	<div class="col-lg-offset-1 col-lg-10">
-		<div class="row grid" >
+		<div v-if="show" class="row grid" >
 			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 grid-item" v-for="post in komicaPosts">
 				<a v-link="'/detail/' + where + '/' + post.no">
 					<div class="item-warp">
@@ -25,28 +25,31 @@
 								{{ post.date }} {{ post.time }}
 							</div>
 						</div>
-						<!-- <ul>
-							<li v-for="reply in post.replyPost">
-								{{{ reply.text }}}
-							</li>
-						</ul> -->
 					</div>
+					<!-- <ul>
+						<li v-for="reply in post.replyPost">
+							{{{ reply.text }}}
+						</li>
+					</ul> -->
 				</a>
 			</div>
 		</div>
-		<div class="loading-icon">
-			<infinite-loading :on-infinite="onInfinite"></infinite-loading>
+		<div class="row">
+			<div v-show="isButtom" class="infinite-loading">
+				<infinite-loading :on-infinite="onInfinite" spinner="waveDots">
+				 	<span slot="no-more">
+				    	到底了唷 :)
+			    	</span>
+				</infinite-loading>
+			</div>
 		</div>
+		
 	</div>
 </template>
 
 <style>
-	.loading-icon{
-		position: fixed;
-		left: 270px;
-		right: 0;
-		top: 80px;
-		background-color: rgba(0,0,0, .8);
+	.infinite-loading{
+
 	}
 </style>
 
@@ -67,29 +70,47 @@
 				where: this.$route.params.where,
 				$grid: "",
 				page: 0,
+				loading: false,
 				show: false,
+				isButtom: false,
 			}
 		},
 		methods:{
-			updatePost(){
-				this.$http.get('https://komicaapi.apphb.com/api/' + this.where + "?page=" + this.page).then((res) => {
+			updatePost(refresh){
+				if(!this.loading){
+					self.loading = true;
 
-					var self = this;
+					this.$http.get('https://komicaapi.apphb.com/api/' + this.where + "?page=" + this.page).then((res) => {
 
-					$.each(res.data, function(i, data){
-						self.komicaPosts.push(data);
-					});
+						var self = this;
 
-					self.masonryInit();
-					this.show = true;
+						if(refresh){
+							self.komicaPosts = res.data;
+						}else{
+							$.each(res.data, function(i, data){
+								self.komicaPosts.push(data);
+							});
+						}
+
+						self.masonryInit();
+						
+						setTimeout(function () {
+	                   		self.masonryInit();
+		                }, 500);
+
+						self.page += 1;
+
+						self.loading = false;
+						self.show = true;
+						self.$broadcast('$InfiniteLoading:loaded');
+
 					
-					setTimeout(function () {
-                   		self.masonryInit();
-	                }, 500);
-
-					this.page += 1;
-
-				}).catch((err) => { console.log(err) })
+					}).catch((err) => { 
+						console.log(err) 
+						//this.$broadcast('$InfiniteLoading:complete');
+						this.isButtom = true;
+					})
+				}
 			},
 			masonryInit(){
 				this.$grid = $('.grid').imagesLoaded(function (self) {
@@ -100,12 +121,20 @@
 			    });			    
 			},
 			onInfinite() {
-				setTimeout(() => {
-					this.updatePost();
-					this.$broadcast('$InfiniteLoading:loaded');
-				}, 1000);
-
-			},
+				if(this.page == 0){
+					this.updatePost(true);
+				}else{
+					this.updatePost(false);
+				}
+			}
+		},
+		events:{
+			refresh(){
+				this.page = 0;
+				this.updatePost(true);
+				this.isButtom = false;
+				$("body, html").animate({ "scrollTop": 0 }, 600);
+			}
 		},
 		computed:{
 			where: function(){
@@ -117,8 +146,9 @@
 				this.komicaPosts = [];
 				this.page = 0;
 				this.show = false;
+				this.isButtom = false;
 				$("body, html").animate({ "scrollTop": 0 }, 600);
-				this.updatePost();
+				this.updatePost(true);
 			}
 		},
 		ready: function(){
@@ -128,4 +158,5 @@
 			InfiniteLoading,
 		},
 	}
+
 </script>

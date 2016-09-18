@@ -1,3 +1,4 @@
+import $ from "jquery";
 import Vue from 'vue';
 import App from './components/App.vue';
 import Home from './components/Home.vue';
@@ -31,3 +32,14 @@ router.redirect({
 })
 
 router.start(App, '#app');
+
+Vue.http.interceptors.push((request, next) => {
+
+  	$("#js-loading").fadeIn(600);
+
+  next((response) => {
+
+  	$("#js-loading").fadeOut(600);
+
+  });
+});

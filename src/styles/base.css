@@ -55,8 +55,31 @@ header{
     font-size: 3em;
 }
 
+.loading-overlay{
+	position: fixed;
+	top: 80px;
+	right: 0;
+	left: 270px;
+	bottom: 0;
+	background-color: rgba(0,0,0,.9);
+	z-index: 2;
+}
 
-.menu-humbuger, .github{
+.loading-overlay::before{
+    content: "";
+    position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	background-image: url('/src/images/Loading_icon.gif');
+	background-repeat: no-repeat;
+	background-size: initial;
+	background-position: center;
+}
+
+
+.menu-humbuger, .refresh{
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
@@ -74,14 +97,12 @@ header h2{
 	margin-top: 30px;
 }
 
-.github{
+.refresh{
 	right: 10px;
 	color: white;
+	transition: all .5s ease-in;
 }
 
-.github:active, .github:hover, .github:focus{
-	color: white;
-}
 
 .menu-left{
 	position: fixed;
@@ -127,6 +148,9 @@ header h2{
 	}
 	.overlay.is-visible{
 		display: block;
+	}
+	.loading-overlay{
+		left: 0;
 	}
 }
 
