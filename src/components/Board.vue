@@ -2,25 +2,23 @@
 	<div class="col-lg-offset-1 col-lg-10">
 		<div v-if="show" class="row grid" >
 			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 grid-item" v-for="post in komicaPosts">
-				<a v-link="'/detail/' + where + '/' + post.no">
 					<div class="item-warp">
+						<div class="item-info">No.{{ post.no }}  {{ post.name }} </div>
 						<div class="item-hideNum">{{ post.hidePost }}</div>
 						<div class="item-header">
 							<img v-bind:src="post.imgSmall" class="img-responsive"/>
+							<div class="item-id">ID：{{ post.id }}</div>
 						</div>
-						<div class="item-body">
-							<div class="item-title">
-								{{{ post.title }}}
+						<a v-link="'/detail/' + where + '/' + post.no">
+							<div class="item-body">
+								<div class="item-title">
+									{{{ post.title }}}
+								</div>
+								<div class="item-content">
+									{{{ post.text.substring(0, 200) }}}{{ post.text.length > 200 ? "......" : nul }}
+								</div>
 							</div>
-							<div class="item-info">
-								No.{{ post.no }}
-								Name: {{ post.name }}  
-								Id: {{ post.id }}
-							</div>
-							<div class="item-content">
-								{{{ post.text.substring(0, 200) }}}{{ post.text.length > 200 ? "......" : nul }}
-							</div>
-						</div>
+						</a>
 						<div class="item-footer">
 							<div class="item-datetime">
 								{{ post.date }} {{ post.time }}
@@ -32,7 +30,6 @@
 							{{{ reply.text }}}
 						</li>
 					</ul> -->
-				</a>
 			</div>
 		</div>
 		<div class="row">
@@ -64,6 +61,7 @@
 	import Masonry from 'masonry-layout';
 	import imagesLoaded from "imagesloaded";
 	import InfiniteLoading   from 'vue-infinite-loading';
+	import moment from "moment";
 	import {router} from '../main.js';
 
 	// provide jQuery argument
@@ -93,6 +91,7 @@
 						var tempArrOld = self.komicaPosts;
 
 						$.each(res.data, function(i, data){
+							data.date = moment(new Date("20"+data.date)).format("YYYY/MM/DD");
 							tempArrNew.push(data);
 							tempArrOld.push(data);
 						});
