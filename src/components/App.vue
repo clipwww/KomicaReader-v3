@@ -44,7 +44,9 @@
 </template>
 
 <style>
-
+.loading-overlay::before{
+	background-image: url('/src/images/Loading_icon.gif');
+}
 
 </style>
 

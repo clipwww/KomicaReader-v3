@@ -1,24 +1,20 @@
 <template>
-	<div class="col-sm-12">
-		<div class='text-center'>
-
-		</div>
+	<div class="col-sm-12" style="display:flex">
+		<img :src="homeImg" class="img-responsive" style="margin:auto">
 	</div>
 </template>
 
 <script>
+	import HomeImg from "../images/hjs93j06.png";
 	export default{
 		data(){
 			return{
-				quote: ''
+				quote: '',
+				homeImg: HomeImg
 			}
 		},
 		methods:{
-			getQuote(){
-				this.$http.get('http://localhost:3001/api/random-quote').then((res) => {
-					this.quote = res.data
-				}).catch((err) => { console.log(err) })
-			}
+
 		}
 	}
 </script>
