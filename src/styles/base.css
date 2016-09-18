@@ -1,6 +1,5 @@
 @import url(https://fonts.googleapis.com/earlyaccess/notosanstc.css);
 @import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
-@impourl(/src/images/Loading_icon.gif);
 
 body{
 	font-family:"LiHei Pro", "Noto Sans TC", "微軟正黑體", "Microsoft JhengHei", sans-serif;
@@ -55,6 +54,25 @@ header{
     right:5px;
     color: white;
     font-size: 3em;
+}
+
+.loading-overlay{
+	position: fixed;
+	top: 80px;
+	right: 0;
+	left: 270px;
+	bottom: 0;
+	background-color: rgba(0,0,0,.9);
+	z-index: 2;
+	display: none;
+}
+
+.loading-overlay img{
+    content: "";
+    position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,  -50%)
 }
 
 

@@ -32,7 +32,9 @@
 		</header>
 
 		<div id="js-overlay" class="overlay" v-on:click="menuToggle"></div>
-		<div id="js-loading" class="loading-overlay"></div>
+		<div id="js-loading" class="loading-overlay">
+			<img :src="loadingIcon" />
+		</div>
 
 		<div class='container-fluid'>
 			<div class="row">
@@ -44,15 +46,14 @@
 </template>
 
 <style>
-.loading-overlay::before{
-	background-image: url('/src/images/Loading_icon.gif');
-}
+
 
 </style>
 
 <script>
 	import $ from "jquery";
 	import Logo from "../images/komicaLogo.jpg";
+	import LoadingIcon from "../images/Loading_icon.gif";
 	import {router} from '../main.js';
 
 	const titleText = {
@@ -69,6 +70,7 @@
 			return {
 				title: "Komica",
 				logo: Logo,
+				loadingIcon: LoadingIcon,
 				list: [],
 				busy: false
 			}
