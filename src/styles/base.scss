@@ -31,7 +31,7 @@ header {
     text-align: center;
     color: white;
     box-shadow: 0 0 10px rgba(0,0,0,.4);
-    z-index: 1;
+    z-index: 2;
 
     h2 {
         margin: 0;
@@ -126,6 +126,7 @@ header {
     -webkit-transition: all .3s ease-in-out;
     transition: all .3s ease-in-out;
     box-shadow: 0 0 5px rgba(0,0,0, .4);
+    overflow-y: auto;
     z-index: 4;
 
     > ul > li > a {
@@ -176,7 +177,7 @@ header {
 }
 
 .item-warp {
-    margin-bottom: 30px;
+    margin-top: 30px;
     box-shadow: 0 1px 3px rgba(0,0,0,.4);
     background-color: #F0E0D6;
     position: relative;
@@ -209,13 +210,17 @@ header {
 
     .item-info {
         padding: 0 10px;
+        font-weight: 500;
     }
 
     .item-header {
-        display: flex;
         background-color: white;
         position: relative;
         overflow: hidden;
+
+        a {
+            display: flex;
+        }
 
         img {
             margin: auto;
@@ -252,8 +257,8 @@ header {
         }
     }
 
-    .item-footer{
-        .item-datetime{
+    .item-footer {
+        .item-datetime {
             text-align: right;
             padding: 0 10px;
             color: #808080;
@@ -270,4 +275,61 @@ header {
             transform: scale(1.2);
         }
     }
+}
+
+.item-list-wrap {
+    margin-bottom: 5px;
+    background-color: #EEDFF0;
+    padding: 5px;
+
+    .item-info {
+        font-size: .9em;
+        border-bottom: 1px solid #BBD1E9;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+
+    .item-image {
+        float: left;
+        width: 80px;
+        margin-right: 5px;
+    }
+
+    .item-body {
+        .item-title {
+            font-size: .9em;
+            margin-bottom: 5px;
+        }
+
+        .item-content {
+            overflow: hidden;
+        }
+    }
+
+    .item-footer {
+        text-align: right;
+        color: #808080;
+        font-size: .9em;
+    }
+}
+
+.qlink {
+    color: blue;
+}
+
+.list {
+    .grid-item {
+        width: 100%;
+    }
+}
+
+.read-more {
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0;
+}
+
+.pushpost{
+    background-color: white;
+    padding: 5px;
 }
